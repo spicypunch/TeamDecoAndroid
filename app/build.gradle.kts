@@ -36,6 +36,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
+    dataBinding {
+        enable = true
+    }
 }
 
 dependencies {
@@ -61,6 +67,8 @@ dependencies {
     // okHttp
     implementation(libs.okhttp)
 
+    // gson
+    implementation(libs.gson.v288)
     // DI
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
