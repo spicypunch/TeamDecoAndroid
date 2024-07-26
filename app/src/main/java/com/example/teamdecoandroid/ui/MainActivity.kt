@@ -2,16 +2,12 @@ package com.example.teamdecoandroid.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.teamdecoandroid.R
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamdecoandroid.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -21,15 +17,21 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
+    private val adapter by lazy { MainAdapter() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
         viewModel.startListenOrderBook()
 
         lifecycleScope.launch {
-            viewModel.coinData.collect { coin ->
-                Log.d("Coin", coin.toString())
+            viewModel.coinDataList.collect { coin ->
+                Log.e("Coin", coin.toString())
+                adapter.submitList(coin)
             }
         }
     }

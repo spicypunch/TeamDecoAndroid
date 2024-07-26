@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -26,8 +27,8 @@ class MainViewModel @Inject constructor(
     private val gson: Gson
 ) : ViewModel() {
 
-    private val _coinData = MutableStateFlow<Coin?>(null)
-    val coinData = _coinData.asStateFlow()
+    private val _coinDataList = MutableStateFlow<List<Coin?>>(emptyList())
+    val coinDataList = _coinDataList.asStateFlow()
 
     private var webSocketList: MutableList<WebSocket> = mutableListOf()
 
@@ -47,7 +48,7 @@ class MainViewModel @Inject constructor(
             "KRW-DOGE", "KRW-SUI", "KRW-ETC", "KRW-BTG", "KRW-CTC",
             "KRW-ASTR", "KRW-MINA", "KRW-SC", "KRW-ZRX"
         )
-        val type = Type("trade", codeList)
+        val type = Type("ticker", codeList)
         return gson.toJson(arrayListOf(ticket, type))
     }
 
@@ -63,11 +64,21 @@ class MainViewModel @Inject constructor(
                 super.onMessage(webSocket, bytes)
 
                 val bytesToString = bytes.toByteArray().decodeToString()
-                Log.e("test", bytesToString)
+                Log.e("종마루", bytesToString)
                 val coin = gson.fromJson(bytesToString, Coin::class.java)
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    _coinData.emit(coin)
+                    _coinDataList.update { currentList ->
+                        currentList.toMutableList().apply {
+                            val index = indexOfFirst { it?.code == coin.code }
+                            if (index != -1) {
+                                set(index, coin)
+                            } else {
+                                add(coin)
+                            }
+                        }
+
+                    }
                 }
             }
         }
