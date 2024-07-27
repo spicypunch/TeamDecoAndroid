@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import javax.inject.Singleton
 
 @Module
@@ -16,6 +17,15 @@ object OkHttpModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    fun startWebSocket(): Request {
+        val request = Request.Builder()
+            .url("https://api.upbit.com/websocket/v1")
+            .build()
+        return request
     }
 
     @Provides

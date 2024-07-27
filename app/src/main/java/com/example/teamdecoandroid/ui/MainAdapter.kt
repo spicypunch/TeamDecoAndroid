@@ -10,8 +10,19 @@ import com.example.teamdecoandroid.databinding.ItemCoinBinding
 
 class MainAdapter : ListAdapter<Coin, MainAdapter.MyViewHolder>(diffUtil) {
 
-    class MyViewHolder(private val binding: ItemCoinBinding) : RecyclerView.ViewHolder(binding.root) {
+    private var originalList: List<Coin> = listOf()
 
+    fun submitCoinList(list: List<Coin>) {
+        originalList = list
+        submitList(originalList)
+    }
+
+    fun coinNameFilter(query: String) {
+        val filteredList = originalList.filter { it.code.contains(query, ignoreCase = true)}
+        submitList(filteredList)
+    }
+
+    class MyViewHolder(private val binding: ItemCoinBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Coin) {
             binding.data = item
         }

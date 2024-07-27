@@ -1,6 +1,5 @@
 package com.example.teamdecoandroid.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.teamdecoandroid.data.Coin
@@ -24,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val okHttpClient: OkHttpClient,
+    private val startWebSocket: Request,
     private val gson: Gson
 ) : ViewModel() {
 
@@ -33,9 +33,7 @@ class MainViewModel @Inject constructor(
     private var webSocketList: MutableList<WebSocket> = mutableListOf()
 
     fun startListenOrderBook() {
-        val request = Request.Builder()
-            .url("https://api.upbit.com/websocket/v1")
-            .build()
+        val request = startWebSocket
         val webSocket = okHttpClient.newWebSocket(request, orderBookListener())
         webSocketList.add(webSocket)
     }
@@ -64,7 +62,6 @@ class MainViewModel @Inject constructor(
                 super.onMessage(webSocket, bytes)
 
                 val bytesToString = bytes.toByteArray().decodeToString()
-                Log.e("종마루", bytesToString)
                 val coin = gson.fromJson(bytesToString, Coin::class.java)
 
                 viewModelScope.launch(Dispatchers.IO) {

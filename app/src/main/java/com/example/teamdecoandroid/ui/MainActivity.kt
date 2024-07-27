@@ -1,7 +1,7 @@
 package com.example.teamdecoandroid.ui
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,10 +14,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
     private val viewModel: MainViewModel by viewModels()
-
     private val adapter by lazy { MainAdapter() }
+
+    private var query = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +30,30 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.coinDataList.collect { coin ->
-                Log.e("Coin", coin.toString())
-                adapter.submitList(coin)
+                if (query.isEmpty()) {
+                    adapter.submitCoinList(
+                        coin.filterNotNull()
+                    )
+                } else {
+                    adapter.submitCoinList(
+                        coin.filterNotNull().filter {
+                            it.code.contains(
+                                query,
+                                ignoreCase = true
+                            )
+                        }
+                    )
+                }
+            }
+        }
+
+        binding.btnSearch.setOnClickListener {
+            if (binding.editSearch.text.toString().isBlank()) {
+                query = ""
+                Toast.makeText(this, "전체 코인을 검색합니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                query = binding.editSearch.text.toString()
+                adapter.coinNameFilter(query)
             }
         }
     }

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="data"
             type="com.example.teamdecoandroid.data.Coin" />
@@ -17,7 +16,7 @@
         android:layout_marginBottom="4dp">
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_coin_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -33,13 +32,13 @@
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(data.trade_price)}"
             android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_trade_volume"
-            app:layout_constraintStart_toEndOf="@+id/tv_name"
+            app:layout_constraintEnd_toStartOf="@+id/tv_trade_price_24"
+            app:layout_constraintStart_toEndOf="@+id/tv_coin_name"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="750" />
 
         <TextView
-            android:id="@+id/tv_trade_volume"
+            android:id="@+id/tv_trade_price_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(data.acc_trade_price_24h)}"
