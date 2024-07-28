@@ -73,8 +73,8 @@ class MainViewModel @Inject constructor(
                             } else {
                                 add(coin)
                             }
+                            sortedByDescending { it?.trade_price }
                         }
-
                     }
                 }
             }

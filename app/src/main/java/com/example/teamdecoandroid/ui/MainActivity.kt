@@ -47,6 +47,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.tvHeaderTradePrice.setOnClickListener {
+
+        }
+
+        binding.tvHeaderTradePrice24.setOnClickListener {
+
+        }
+
         binding.btnSearch.setOnClickListener {
             if (binding.editSearch.text.toString().isBlank()) {
                 query = ""

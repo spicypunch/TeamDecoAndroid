@@ -18,11 +18,12 @@ class MainAdapter : ListAdapter<Coin, MainAdapter.MyViewHolder>(diffUtil) {
     }
 
     fun coinNameFilter(query: String) {
-        val filteredList = originalList.filter { it.code.contains(query, ignoreCase = true)}
+        val filteredList = originalList.filter { it.code.contains(query, ignoreCase = true) }
         submitList(filteredList)
     }
 
-    class MyViewHolder(private val binding: ItemCoinBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(private val binding: ItemCoinBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Coin) {
             binding.data = item
         }
