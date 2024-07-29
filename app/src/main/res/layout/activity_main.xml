@@ -67,6 +67,31 @@
             app:layout_constraintStart_toStartOf="@id/guideline_trade_price"
             app:layout_constraintTop_toBottomOf="@+id/linearlayout_search" />
 
+        <LinearLayout
+            android:id="@+id/linearlayout_trade_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/tv_header_trade_price"
+            app:layout_constraintStart_toEndOf="@id/tv_header_trade_price"
+            app:layout_constraintTop_toTopOf="@id/tv_header_trade_price">
+
+            <ImageView
+                android:id="@+id/icon_trade_asc"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_up" />
+
+            <ImageView
+                android:id="@+id/icon_trade_desc"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_down" />
+
+        </LinearLayout>
+
+
         <TextView
             android:id="@+id/tv_header_trade_price_24"
             android:layout_width="wrap_content"
@@ -76,6 +101,30 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/guideline_trade_price_24"
             app:layout_constraintTop_toBottomOf="@+id/linearlayout_search" />
+
+        <LinearLayout
+            android:id="@+id/linearlayout_trade_24_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/tv_header_trade_price_24"
+            app:layout_constraintStart_toEndOf="@id/tv_header_trade_price_24"
+            app:layout_constraintTop_toTopOf="@id/tv_header_trade_price_24">
+
+            <ImageView
+                android:id="@+id/icon_trade_24_asc"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_up" />
+
+            <ImageView
+                android:id="@+id/icon_trade_24_desc"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_down" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"

@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val adapter by lazy { MainAdapter() }
 
+    
+
     private var query = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.tvHeaderTradePrice.setOnClickListener {
+
+        }
+
+        binding.linearlayoutTradeSort.setOnClickListener {
+
+        }
+
+        binding.linearlayoutTrade24Sort.setOnClickListener {
 
         }
 
