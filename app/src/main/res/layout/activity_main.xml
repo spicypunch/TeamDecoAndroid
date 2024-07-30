@@ -113,13 +113,13 @@
             app:layout_constraintTop_toTopOf="@id/tv_header_trade_price_24">
 
             <ImageView
-                android:id="@+id/icon_trade_24_asc"
+                android:id="@+id/icon_volume_24_asc"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/arrow_up" />
 
             <ImageView
-                android:id="@+id/icon_trade_24_desc"
+                android:id="@+id/icon_volume_24_desc"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/arrow_down" />

@@ -1,11 +1,13 @@
 package com.example.teamdecoandroid.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.teamdecoandroid.common.SortType
 import com.example.teamdecoandroid.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -17,8 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val adapter by lazy { MainAdapter() }
 
-    
-
+    private var tradePriceSortState = SortType.TRADE_PRICE_ASC
+    private var volume24SortState = SortType.VOLUME_24_ASC
     private var query = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,14 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel.startListenOrderBook()
+
+        viewModel.tradePriceSortState.observe(this) {
+            tradePriceSortState = it
+        }
+
+        viewModel.volume24SortState.observe(this) {
+            volume24SortState = it
+        }
 
         lifecycleScope.launch {
             viewModel.coinDataList.collect { coin ->
@@ -50,19 +60,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.tvHeaderTradePrice.setOnClickListener {
-
-        }
-
-        binding.linearlayoutTradeSort.setOnClickListener {
-
-        }
-
-        binding.linearlayoutTrade24Sort.setOnClickListener {
-
+            adapter.tradePriceSort(tradePriceSortState)
+            changeArrowColor(tradePriceSortState)
+            viewModel.toggleTradePriceSortState(tradePriceSortState)
         }
 
         binding.tvHeaderTradePrice24.setOnClickListener {
-
+            adapter.tradePrice24Sort(volume24SortState)
+            changeArrowColor(volume24SortState)
+            viewModel.toggleVolume24SortState(volume24SortState)
         }
 
         binding.btnSearch.setOnClickListener {
@@ -74,5 +80,25 @@ class MainActivity : AppCompatActivity() {
                 adapter.coinNameFilter(query)
             }
         }
+    }
+
+    private fun changeArrowColor(sortType: SortType) {
+
+        // 모든 아이콘 검정색으로
+        listOf(
+            binding.iconTradeAsc,
+            binding.iconTradeDesc,
+            binding.iconVolume24Asc,
+            binding.iconVolume24Desc
+        ).forEach { it.setColorFilter(Color.BLACK) }
+
+        val iconToHighlight = when (sortType) {
+            SortType.TRADE_PRICE_ASC -> binding.iconTradeAsc
+            SortType.TRADE_PRICE_DESC -> binding.iconTradeDesc
+            SortType.VOLUME_24_ASC -> binding.iconVolume24Asc
+            SortType.VOLUME_24_DESC -> binding.iconVolume24Desc
+        }
+
+        iconToHighlight.setColorFilter(Color.WHITE)
     }
 }

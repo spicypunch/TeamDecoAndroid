@@ -1,7 +1,10 @@
 package com.example.teamdecoandroid.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.teamdecoandroid.common.SortType
 import com.example.teamdecoandroid.data.Coin
 import com.example.teamdecoandroid.data.Ticket
 import com.example.teamdecoandroid.data.Type
@@ -32,6 +35,12 @@ class MainViewModel @Inject constructor(
 
     private var webSocketList: MutableList<WebSocket> = mutableListOf()
 
+    private var _tradePriceSortState = MutableLiveData<SortType>()
+    val tradePriceSortState: LiveData<SortType> = _tradePriceSortState
+
+    private var _volume24SortState = MutableLiveData<SortType>()
+    val volume24SortState: LiveData<SortType> = _volume24SortState
+
     fun startListenOrderBook() {
         val request = startWebSocket
         val webSocket = okHttpClient.newWebSocket(request, orderBookListener())
@@ -54,7 +63,6 @@ class MainViewModel @Inject constructor(
         return object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 super.onOpen(webSocket, response)
-
                 webSocket.send(createTicket())
             }
 
@@ -73,11 +81,26 @@ class MainViewModel @Inject constructor(
                             } else {
                                 add(coin)
                             }
-                            sortedByDescending { it?.trade_price }
                         }
                     }
                 }
             }
+        }
+    }
+
+    fun toggleTradePriceSortState(currentState: SortType) {
+        if (currentState == SortType.TRADE_PRICE_ASC) {
+            _tradePriceSortState.value = SortType.TRADE_PRICE_DESC
+        } else {
+            _tradePriceSortState.value = SortType.TRADE_PRICE_ASC
+        }
+    }
+
+    fun toggleVolume24SortState(currentState: SortType) {
+        if (currentState == SortType.VOLUME_24_ASC) {
+            _volume24SortState.value = SortType.VOLUME_24_DESC
+        } else {
+            _volume24SortState.value = SortType.VOLUME_24_ASC
         }
     }
 
