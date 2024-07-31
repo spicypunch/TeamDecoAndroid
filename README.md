@@ -23,3 +23,11 @@
 
 <br>
 
+#### 기술스택
+- Hilt
+- okHttp
+- Coroutine Flow
+- MVVM
+- XML Layout
+- List Adapter
+- Data Binding
