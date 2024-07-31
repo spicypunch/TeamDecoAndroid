@@ -1,5 +1,8 @@
 package com.example.teamdecoandroid.ui
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -13,6 +16,8 @@ class MainAdapter : ListAdapter<Coin, MainAdapter.MyViewHolder>(diffUtil) {
 
     private var originalList: List<Coin> = listOf()
     private var currentSortType = SortType.VOLUME_24_DESC
+
+    private val previousPrices = mutableMapOf<String, Double>()
 
     fun submitCoinList(list: List<Coin>) {
         originalList = list
@@ -44,10 +49,42 @@ class MainAdapter : ListAdapter<Coin, MainAdapter.MyViewHolder>(diffUtil) {
         sortCoinList()
     }
 
-    class MyViewHolder(private val binding: ItemCoinBinding) :
+    inner class MyViewHolder(private val binding: ItemCoinBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Coin) {
+
+        fun bind(item: Coin, previousPrice: Double?) {
             binding.data = item
+
+            val backgroundColor = when {
+                previousPrice == null -> Color.TRANSPARENT
+                item.trade_price > previousPrice -> Color.parseColor("#D32F2F")
+                item.trade_price < previousPrice -> Color.parseColor("#1E88E5")
+                else -> Color.TRANSPARENT
+            }
+
+            if (previousPrice != null && item.trade_price != previousPrice) {
+                animateBackgroundColor(backgroundColor)
+            }
+
+            previousPrices[item.code] = item.trade_price
+        }
+
+        private fun animateBackgroundColor(color: Int) {
+            val baseColor = Color.TRANSPARENT
+            val animator = ValueAnimator.ofObject(ArgbEvaluator(), baseColor, color)
+            animator.duration = 500
+            animator.addUpdateListener { animator ->
+                binding.root.setBackgroundColor(animator.animatedValue as Int)
+            }
+            animator.start()
+
+            val resetAnimator = ValueAnimator.ofObject(ArgbEvaluator(), color, baseColor)
+            resetAnimator.duration = 500
+            resetAnimator.startDelay = 500
+            resetAnimator.addUpdateListener { animator ->
+                binding.root.setBackgroundColor(animator.animatedValue as Int)
+            }
+            resetAnimator.start()
         }
     }
 
@@ -57,7 +94,9 @@ class MainAdapter : ListAdapter<Coin, MainAdapter.MyViewHolder>(diffUtil) {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        val coin = currentList[position]
+        val previousPrice = previousPrices[coin.code]
+        holder.bind(coin, previousPrice)
     }
 
     companion object {

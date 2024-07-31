@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeArrowColor(sortType: SortType) {
 
-        // 모든 아이콘 검정색으로
+        // 모든 arrow 아이콘 검정색으로
         listOf(
             binding.iconTradeAsc,
             binding.iconTradeDesc,
@@ -99,6 +99,6 @@ class MainActivity : AppCompatActivity() {
             SortType.VOLUME_24_DESC -> binding.iconVolume24Desc
         }
 
-        iconToHighlight.setColorFilter(Color.WHITE)
+        iconToHighlight.setColorFilter(Color.RED)
     }
 }
