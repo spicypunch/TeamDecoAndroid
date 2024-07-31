@@ -70,14 +70,9 @@ dependencies {
 
     // gson
     implementation(libs.gson.v288)
+
     // DI
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-
-    // TedPermission
-    implementation(libs.tedpermission.normal)
-
-    // DataStore
-    implementation(libs.androidx.datastore.preferences)
 
 }
